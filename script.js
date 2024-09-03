@@ -48,24 +48,46 @@ const pokemons = [
     { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
 ];
 
-/**
- * cette function récupère tout les pokemons dans un tableau et affiche leur nom et leur type
- * @returns {string} Affiche la liste des pokemons
- */
 
+/**
+* Génère le HTML pour une carte Pokémon.
+* @param {Object} pokemon - L'objet Pokémon.
+* @returns {string} - Le HTML de la carte Pokémon.
+*/
+function generatePokemonCardHTML(pokemon) {
+    const types = pokemon.type.split(',');
+    // Détermine la couleur de fond en fonction du nombre de types de Pokémon
+    const backgroundColor = types.length > 1
+        // Si le Pokémon a plus d'un type, 50% une couleur 50% une autre couleur
+        ? `linear-gradient(to right, ${typeColors[types[0]] || DEFAULT_COLOR} 50%, ${typeColors[types[1]] || DEFAULT_COLOR} 50%)`
+        // Si le Pokémon n'a qu'un seul type, utilise la couleur associée à ce type
+        : typeColors[types[0]] || DEFAULT_COLOR;
+    return `
+        <div class="pokemon-card" style="background: ${backgroundColor};">
+            <img src="images/${pokemon.img}" alt="${pokemon.name}">
+            <h2>${pokemon.name}</h2>
+            <div>Type: ${pokemon.type}</div>
+            <div>Niveau: ${pokemon.level}</div>
+        </div>
+    `;
+}
+
+/**
+ * Affiche la liste des Pokémon.
+ */
 function displayPokemons() {
     const container = document.querySelector('.pokemon-container');
     if (!pokemons.length) {
-     return container.innerHTML = '<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>';
-    }   // 'pokemons' est un tableau d'objets, où chaque objet représente un Pokémon avec des propriétés 'name' et 'type'.
-    container.innerHTML = pokemons.map(pokemon =>
-        // Pour chaque Pokémon dans le tableau, on crée une chaîne de caractères HTML.
-        `<p>${pokemon.name} ${pokemon.type.split(',').map(type =>
-            // On divise la chaîne 'type' en un tableau de types individuels.
-            `<small>${type}</small>` // Pour chaque type, on crée un élément <small> contenant le type.
-        ).join(' ')}</p>` // On rejoint tous les éléments <small> avec un espace entre eux.
-    ).join(''); // On rejoint toutes les chaînes de caractères HTML pour chaque Pokémon en une seule chaîne.
+        // Si pas de pokemon, affiche message d'erreur
+        container.innerHTML = '<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>';
+        return;
+    }
+    // Si il y un pokemon génere une carte par pokemon
+    pokemons.forEach(pokemon => {
+            container.innerHTML += generatePokemonCardHTML(pokemon);
+        });
 }
+// Charge l'affichage après le chargement de la page
 window.addEventListener("load", displayPokemons);
 
 
