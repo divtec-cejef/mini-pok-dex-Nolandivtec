@@ -47,3 +47,15 @@ const pokemons = [
     { name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png' },
     { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
 ];
+
+function displayPokemons() {
+    const container = document.querySelector('.pokemon-container');
+    if (pokemons.length === 0) {
+        container.innerHTML = '<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>';
+    } else {
+        container.innerHTML = pokemons.map(pokemon =>
+            `<p>${pokemon.name} ${pokemon.type.split(',').map(type => `<small>${type}</small>`).join(' ')}</p>`
+        ).join('');
+    }
+}
+window.addEventListener("load", displayPokemons);
