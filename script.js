@@ -48,14 +48,24 @@ const pokemons = [
     { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
 ];
 
+/**
+ * cette function récupère tout les pokemons dans un tableau et affiche leur nom et leur type
+ * @returns {string} Affiche la liste des pokemons
+ */
+
 function displayPokemons() {
     const container = document.querySelector('.pokemon-container');
-    if (pokemons.length === 0) {
-        container.innerHTML = '<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>';
-    } else {
-        container.innerHTML = pokemons.map(pokemon =>
-            `<p>${pokemon.name} ${pokemon.type.split(',').map(type => `<small>${type}</small>`).join(' ')}</p>`
-        ).join('');
-    }
+    if (!pokemons.length) {
+     return container.innerHTML = '<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>';
+    }   // 'pokemons' est un tableau d'objets, où chaque objet représente un Pokémon avec des propriétés 'name' et 'type'.
+    container.innerHTML = pokemons.map(pokemon =>
+        // Pour chaque Pokémon dans le tableau, on crée une chaîne de caractères HTML.
+        `<p>${pokemon.name} ${pokemon.type.split(',').map(type =>
+            // On divise la chaîne 'type' en un tableau de types individuels.
+            `<small>${type}</small>` // Pour chaque type, on crée un élément <small> contenant le type.
+        ).join(' ')}</p>` // On rejoint tous les éléments <small> avec un espace entre eux.
+    ).join(''); // On rejoint toutes les chaînes de caractères HTML pour chaque Pokémon en une seule chaîne.
 }
 window.addEventListener("load", displayPokemons);
+
+
