@@ -47,3 +47,47 @@ const pokemons = [
     { name: 'Ronflex', type: 'Normal', level: 45, img: 'ronflex.png' },
     { name: 'Mewtwo', type: 'Psy', level: 70, img: 'mewtwo.png' }
 ];
+
+
+/**
+* Génère le HTML pour une carte Pokémon.
+* @param {Object} pokemon - L'objet Pokémon.
+* @returns {string} - Le HTML de la carte Pokémon.
+*/
+function generatePokemonCardHTML(pokemon) {
+    const types = pokemon.type.split(',');
+    // Détermine la couleur de fond en fonction du nombre de types de Pokémon
+    const backgroundColor = types.length > 1
+        // Si le Pokémon a plus d'un type, 50% une couleur 50% une autre couleur
+        ? `linear-gradient(to right, ${typeColors[types[0]] || DEFAULT_COLOR} 50%, ${typeColors[types[1]] || DEFAULT_COLOR} 50%)`
+        // Si le Pokémon n'a qu'un seul type, utilise la couleur associée à ce type
+        : typeColors[types[0]] || DEFAULT_COLOR;
+    return `
+        <div class="pokemon-card" style="background: ${backgroundColor};">
+            <img src="images/${pokemon.img}" alt="${pokemon.name}">
+            <h2>${pokemon.name}</h2>
+            <div>Type: ${pokemon.type}</div>
+            <div>Niveau: ${pokemon.level}</div>
+        </div>
+    `;
+}
+
+/**
+ * Affiche la liste des Pokémon.
+ */
+function displayPokemons() {
+    const container = document.querySelector('.pokemon-container');
+    if (!pokemons.length) {
+        // Si pas de pokemon, affiche message d'erreur
+        container.innerHTML = '<p>Dracaufeu a tout brûlé, aucun Pokémon ne correspond à ta recherche !</p>';
+        return;
+    }
+    // Si il y un pokemon génere une carte par pokemon
+    pokemons.forEach(pokemon => {
+            container.innerHTML += generatePokemonCardHTML(pokemon);
+        });
+}
+// Charge l'affichage après le chargement de la page
+window.addEventListener("load", displayPokemons);
+
+
